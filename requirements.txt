@@ -1,0 +1,1 @@
+pip install fastapi uvicorn xgboost scikit-learn joblib pandas seaborn
