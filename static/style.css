@@ -1,0 +1,34 @@
+/* Basic Tailwind utility subset — precompiled */
+.input {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  outline: none;
+}
+.input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+button {
+  background-color: #4f46e5;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  transition: background 0.2s;
+}
+button:hover {
+  background-color: #4338ca;
+}
+body {
+  background-color: #f9fafb;
+  font-family: Arial, sans-serif;
+}
+.container {
+  background-color: white;
+  max-width: 500px;
+  margin: auto;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}

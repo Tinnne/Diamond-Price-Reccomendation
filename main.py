@@ -1,13 +1,18 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 import numpy as np
 import joblib
 
-# Load saved model and preprocessing tools
+app = FastAPI()
+templates = Jinja2Templates(directory="templates")
+
+# Load model and tools
 model = joblib.load("xgb_model.pkl")
 encoder = joblib.load("ordinal_encoder.pkl")
 
-# Define input schema
+# Input schema
 class DiamondInput(BaseModel):
     carat: float
     cut: str
@@ -19,22 +24,20 @@ class DiamondInput(BaseModel):
     y: float
     z: float
 
-# Initialize app
-app = FastAPI()
+# Serve the HTML page
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
+# Prediction endpoint
 @app.post("/predict")
 def predict(data: DiamondInput):
-    # Extract input and transform
     raw = [[
         data.carat, data.cut, data.color, data.clarity,
         data.depth, data.table, data.x, data.y, data.z
     ]]
-    
-    # Encode categorical values
     raw_np = np.array(raw, dtype=object)
     raw_np[:, 1:4] = encoder.transform(raw_np[:, 1:4])
     raw_np = raw_np.astype(float)
-
-    # Predict
     prediction = model.predict(raw_np)
     return {"predicted_price": round(float(prediction[0]), 2)}

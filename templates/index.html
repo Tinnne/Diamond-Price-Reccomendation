@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Diamond Price Predictor 💎</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 min-h-screen flex items-center justify-center px-4">
+    <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
+      <h2 class="text-2xl font-bold mb-6 text-center text-indigo-600">
+        💎 Diamond Price Predictor
+      </h2>
+
+      <form id="diamond-form" class="space-y-4">
+        <input type="number" step="0.01" name="carat" placeholder="Carat" required class="input" />
+
+        <select name="cut" class="input">
+          <option disabled selected>Cut</option>
+          <option>Fair</option>
+          <option>Good</option>
+          <option>Very Good</option>
+          <option>Premium</option>
+          <option>Ideal</option>
+        </select>
+
+        <select name="color" class="input">
+          <option disabled selected>Color</option>
+          <option>J</option>
+          <option>I</option>
+          <option>H</option>
+          <option>G</option>
+          <option>F</option>
+          <option>E</option>
+          <option>D</option>
+        </select>
+
+        <select name="clarity" class="input">
+          <option disabled selected>Clarity</option>
+          <option>I1</option>
+          <option>SI2</option>
+          <option>SI1</option>
+          <option>VS2</option>
+          <option>VS1</option>
+          <option>VVS2</option>
+          <option>VVS1</option>
+          <option>IF</option>
+        </select>
+
+        <input type="number" step="0.1" name="depth" placeholder="Depth" required class="input" />
+        <input type="number" step="0.1" name="table" placeholder="Table" required class="input" />
+        <input type="number" step="0.01" name="x" placeholder="X" required class="input" />
+        <input type="number" step="0.01" name="y" placeholder="Y" required class="input" />
+        <input type="number" step="0.01" name="z" placeholder="Z" required class="input" />
+
+        <button
+          type="submit"
+          class="w-full bg-indigo-600 text-white py-2 px-4 rounded-xl hover:bg-indigo-700 transition"
+        >
+          Predict Price
+        </button>
+      </form>
+
+      <div id="result" class="text-xl text-center mt-6 font-semibold text-green-600"></div>
+    </div>
+
+    <style>
+      .input {
+        @apply w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400;
+      }
+    </style>
+
+    <script>
+      const form = document.getElementById("diamond-form");
+      const result = document.getElementById("result");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        for (let key in data) data[key] = isNaN(data[key]) ? data[key] : parseFloat(data[key]);
+
+        const res = await fetch("/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const json = await res.json();
+        result.textContent = `💰 Predicted Price: $${json.predicted_price}`;
+      });
+    </script>
+  </body>
+</html>
