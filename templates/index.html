@@ -11,9 +11,25 @@
         💎 Diamond Price Predictor
       </h2>
 
-      <form id="diamond-form" class="space-y-4">
-        <input type="number" step="0.01" name="carat" placeholder="Carat" required class="input" />
+      <form id="diamond-form" class="space-y-6">
+        <!-- Carat Slider -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700"
+            >Carat: <span id="carat-val" class="font-bold">0.5</span></label
+          >
+          <input
+            type="range"
+            min="0"
+            max="5"
+            step="0.01"
+            name="carat"
+            id="carat"
+            value="0"
+            class="slider"
+          />
+        </div>
 
+        <!-- Cut Dropdown -->
         <select name="cut" class="input">
           <option disabled selected>Cut</option>
           <option>Fair</option>
@@ -22,7 +38,9 @@
           <option>Premium</option>
           <option>Ideal</option>
         </select>
+        <br />
 
+        <!-- Color Dropdown -->
         <select name="color" class="input">
           <option disabled selected>Color</option>
           <option>J</option>
@@ -33,7 +51,9 @@
           <option>E</option>
           <option>D</option>
         </select>
+        <br />
 
+        <!-- Clarity Dropdown -->
         <select name="clarity" class="input">
           <option disabled selected>Clarity</option>
           <option>I1</option>
@@ -46,11 +66,90 @@
           <option>IF</option>
         </select>
 
-        <input type="number" step="0.1" name="depth" placeholder="Depth" required class="input" />
-        <input type="number" step="0.1" name="table" placeholder="Table" required class="input" />
-        <input type="number" step="0.01" name="x" placeholder="X" required class="input" />
-        <input type="number" step="0.01" name="y" placeholder="Y" required class="input" />
-        <input type="number" step="0.01" name="z" placeholder="Z" required class="input" />
+        <!-- Depth -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700"
+            >Depth: <span id="depth-val" class="font-bold">60</span></label
+          >
+          <input
+            type="range"
+            min="40"
+            max="80"
+            step="0.1"
+            name="depth"
+            id="depth"
+            value="40"
+            class="slider"
+          />
+        </div>
+
+        <!-- Table -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700"
+            >Table: <span id="table-val" class="font-bold">55</span></label
+          >
+          <input
+            type="range"
+            min="40"
+            max="100"
+            step="0.1"
+            name="table"
+            id="table"
+            value="40"
+            class="slider"
+          />
+        </div>
+
+        <!-- X -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700"
+            >X: <span id="x-val" class="font-bold">4</span></label
+          >
+          <input
+            type="range"
+            min="0"
+            max="11"
+            step="0.01"
+            name="x"
+            id="x"
+            value="0"
+            class="slider"
+          />
+        </div>
+
+        <!-- Y -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700"
+            >Y: <span id="y-val" class="font-bold">4</span></label
+          >
+          <input
+            type="range"
+            min="0"
+            max="60"
+            step="0.01"
+            name="y"
+            id="y"
+            value="0"
+            class="slider"
+          />
+        </div>
+
+        <!-- Z -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700"
+            >Z: <span id="z-val" class="font-bold">2.5</span></label
+          >
+          <input
+            type="range"
+            min="0"
+            max="35"
+            step="0.01"
+            name="z"
+            id="z"
+            value="0"
+            class="slider"
+          />
+        </div>
 
         <button
           type="submit"
@@ -67,11 +166,24 @@
       .input {
         @apply w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400;
       }
+      .slider {
+        @apply w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer;
+      }
     </style>
 
     <script>
       const form = document.getElementById("diamond-form");
       const result = document.getElementById("result");
+
+      // Update live slider values
+      const sliders = ["carat", "depth", "table", "x", "y", "z"];
+      sliders.forEach((id) => {
+        const slider = document.getElementById(id);
+        const display = document.getElementById(`${id}-val`);
+        slider.addEventListener("input", () => {
+          display.textContent = slider.value;
+        });
+      });
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
